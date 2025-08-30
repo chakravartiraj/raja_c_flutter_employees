@@ -1,0 +1,201 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+
+import '../../domain/entities/employee.dart';
+import '../bloc/employee_bloc.dart';
+
+class AddEmployeePage extends StatefulWidget {
+  const AddEmployeePage({super.key});
+
+  @override
+  State<AddEmployeePage> createState() => _AddEmployeePageState();
+}
+
+class _AddEmployeePageState extends State<AddEmployeePage> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+
+  DateTime? _joinDate;
+  EmployeeRole _selectedRole = EmployeeRole.flutterDeveloper;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<EmployeeBloc, EmployeeState>(
+      listener: (context, state) {
+        if (state is EmployeeLoaded) {
+          // Check if this is after adding an employee by clearing the form
+          if (_nameController.text.isNotEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Employee added successfully!')),
+            );
+            context.go('/');
+          }
+        } else if (state is EmployeeError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: ${state.message}')));
+        }
+      },
+      child: PopScope(
+        canPop: true,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            context.go('/');
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Add New Employee'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => context.go('/'),
+            ),
+          ),
+          body: Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Employee Information',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Full Name *',
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter full name';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        DropdownButtonFormField<EmployeeRole>(
+                          initialValue: _selectedRole,
+                          decoration: const InputDecoration(
+                            labelText: 'Role *',
+                            border: OutlineInputBorder(),
+                          ),
+                          items: EmployeeRole.values.map((role) {
+                            return DropdownMenuItem(
+                              value: role,
+                              child: Text(_getRoleDisplayName(role)),
+                            );
+                          }).toList(),
+                          onChanged: (EmployeeRole? newValue) {
+                            setState(() {
+                              _selectedRole = newValue!;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please select a role';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        InkWell(
+                          onTap: () => _selectDate(context),
+                          child: InputDecorator(
+                            decoration: const InputDecoration(
+                              labelText: 'Join Date *',
+                              border: OutlineInputBorder(),
+                              suffixIcon: Icon(Icons.calendar_today),
+                            ),
+                            child: Text(
+                              _joinDate == null
+                                  ? 'Select join date'
+                                  : DateFormat('dd/MM/yyyy').format(_joinDate!),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _submitForm,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: const Text('Add Employee'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != _joinDate) {
+      setState(() {
+        _joinDate = picked;
+      });
+    }
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate() && _joinDate != null) {
+      // Create employee
+      final employee = Employee(
+        id: DateTime.now().millisecondsSinceEpoch
+            .toString(), // Generate a unique ID
+        name: _nameController.text,
+        role: _selectedRole,
+        joinDate: _joinDate!,
+      );
+
+      // Add employee to bloc
+      context.read<EmployeeBloc>().add(AddEmployee(employee));
+    } else if (_joinDate == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please select join date')));
+    }
+  }
+
+  String _getRoleDisplayName(EmployeeRole role) {
+    switch (role) {
+      case EmployeeRole.productDesigner:
+        return 'Product Designer';
+      case EmployeeRole.flutterDeveloper:
+        return 'Flutter Developer';
+      case EmployeeRole.qaTester:
+        return 'QA Tester';
+      case EmployeeRole.productOwner:
+        return 'Product Owner';
+    }
+  }
+}

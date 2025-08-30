@@ -1,0 +1,202 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:raja_c_flutter_employees/features/employees/domain/entities/employee.dart';
+import '../bloc/employee_bloc.dart';
+
+class AddOrEditEmployeePage extends StatefulWidget {
+  final String? employeeId;
+  const AddOrEditEmployeePage({super.key, this.employeeId});
+
+  @override
+  State<AddOrEditEmployeePage> createState() => _AddOrEditEmployeePageState();
+}
+
+class _AddOrEditEmployeePageState extends State<AddOrEditEmployeePage> {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _nameCtrl;
+  EmployeeRole? _selectedRole;
+  DateTime? _joinDate;
+  DateTime? _exitDate;
+
+  @override
+  void initState() {
+    super.initState();
+    final existing = _existingEmployee;
+    _nameCtrl = TextEditingController(text: existing?.name ?? '');
+    _selectedRole = existing?.role;
+    _joinDate = existing?.joinDate;
+    _exitDate = existing?.exitDate;
+  }
+
+  Employee? get _existingEmployee {
+    if (widget.employeeId == null) return null;
+
+    final state = context.read<EmployeeBloc>().state;
+    if (state is EmployeeLoaded) {
+      try {
+        return state.employees.firstWhere((e) => e.id == widget.employeeId);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  bool get _isEdit => widget.employeeId != null;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          _navigateBack();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(_isEdit ? 'Edit Employee Details' : 'Add Employee Details'),
+          leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: _navigateBack),
+          actions: _isEdit
+              ? [IconButton(icon: const Icon(Icons.delete_outlined), tooltip: 'Delete', onPressed: _handleDelete)]
+              : null,
+        ), // AppBar closing
+        body: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.all(24),
+            children: [
+              // Name
+              _label('Employee Name'),
+              TextFormField(
+                controller: _nameCtrl,
+                decoration: const InputDecoration(hintText: 'Enter name'),
+                validator: (v) => v!.trim().isEmpty ? 'Required' : null,
+              ),
+              const SizedBox(height: 20),
+
+              // Role
+              _label('Select Role'),
+              DropdownButtonFormField<EmployeeRole>(
+                initialValue: _selectedRole,
+                items: EmployeeRole.values.map((e) => DropdownMenuItem(value: e, child: Text(e.label))).toList(),
+                onChanged: (v) => setState(() => _selectedRole = v),
+                decoration: const InputDecoration(hintText: 'Choose role'),
+                validator: (v) => v == null ? 'Required' : null,
+              ),
+              const SizedBox(height: 20),
+
+              // Joining Date
+              _label('Joining Date'),
+              _dateTile(context, _joinDate, (d) => setState(() => _joinDate = d)),
+              const SizedBox(height: 20),
+
+              // Exit Date
+              _label('Exit Date (optional)'),
+              _dateTile(context, _exitDate, (d) => setState(() => _exitDate = d)),
+              const SizedBox(height: 40),
+
+              // Buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(onPressed: _navigateBack, child: const Text('Cancel')),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: FilledButton(onPressed: _handleSave, child: Text(_isEdit ? 'Save' : 'Add')),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ), // Scaffold closing
+      ),
+    ); // PopScope closing
+  }
+
+  Widget _label(String text) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Text(text, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
+  );
+
+  Widget _dateTile(BuildContext context, DateTime? value, Function(DateTime) onChanged) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      tileColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+      title: Text(
+        value == null ? 'Select date' : _format(value),
+        style: TextStyle(color: value == null ? Theme.of(context).hintColor : Theme.of(context).colorScheme.onSurface),
+      ),
+      trailing: Icon(Icons.calendar_today, color: Theme.of(context).colorScheme.primary),
+      onTap: () async {
+        final picked = await showDatePicker(
+          context: context,
+          initialDate: value ?? DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100),
+        );
+        if (picked != null) onChanged(picked);
+      },
+    );
+  }
+
+  String _format(DateTime d) => '${d.day} ${_month(d.month)} ${d.year}';
+
+  String _month(int m) =>
+      const ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][m - 1];
+
+  void _handleSave() {
+    if (!_formKey.currentState!.validate()) return;
+    final employee = Employee(
+      id: _existingEmployee?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+      name: _nameCtrl.text.trim(),
+      role: _selectedRole!,
+      joinDate: _joinDate!,
+      exitDate: _exitDate,
+    );
+
+    // Use AddEmployee event for both add and edit operations
+    context.read<EmployeeBloc>().add(AddEmployee(employee));
+
+    // Navigate back safely
+    _navigateBack();
+  }
+
+  void _handleDelete() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Delete employee?'),
+        content: const Text('This action cannot be undone.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Delete')),
+        ],
+      ),
+    );
+    if (confirmed == true && mounted) {
+      context.read<EmployeeBloc>().add(DeleteEmployee(widget.employeeId!));
+      if (mounted) {
+        _navigateBack();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameCtrl.dispose();
+    super.dispose();
+  }
+
+  /// Helper method to safely navigate back or to home
+  void _navigateBack() {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/');
+    }
+  }
+}
