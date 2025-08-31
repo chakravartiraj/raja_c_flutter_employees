@@ -15,34 +15,26 @@ extension GetEmployeeModelCollection on Isar {
 
 const EmployeeModelSchema = CollectionSchema(
   name: r'EmployeeModel',
-  id: 8017048509502787200,
+  id: 8017048509502787584,
   properties: {
     r'exitDate': PropertySchema(
       id: 0,
       name: r'exitDate',
       type: IsarType.dateTime,
     ),
-    r'id': PropertySchema(
-      id: 1,
-      name: r'id',
-      type: IsarType.string,
-    ),
+    r'id': PropertySchema(id: 1, name: r'id', type: IsarType.string),
     r'joinDate': PropertySchema(
       id: 2,
       name: r'joinDate',
       type: IsarType.dateTime,
     ),
-    r'name': PropertySchema(
-      id: 3,
-      name: r'name',
-      type: IsarType.string,
-    ),
+    r'name': PropertySchema(id: 3, name: r'name', type: IsarType.string),
     r'role': PropertySchema(
       id: 4,
       name: r'role',
       type: IsarType.byte,
       enumMap: _EmployeeModelroleEnumValueMap,
-    )
+    ),
   },
   estimateSize: _employeeModelEstimateSize,
   serialize: _employeeModelSerialize,
@@ -95,7 +87,7 @@ EmployeeModel _employeeModelDeserialize(
   object.name = reader.readString(offsets[3]);
   object.role =
       _EmployeeModelroleValueEnumMap[reader.readByteOrNull(offsets[4])] ??
-          EmployeeRole.productDesigner;
+      EmployeeRole.productDesigner;
   return object;
 }
 
@@ -116,7 +108,8 @@ P _employeeModelDeserializeProp<P>(
       return (reader.readString(offset)) as P;
     case 4:
       return (_EmployeeModelroleValueEnumMap[reader.readByteOrNull(offset)] ??
-          EmployeeRole.productDesigner) as P;
+              EmployeeRole.productDesigner)
+          as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -144,7 +137,10 @@ List<IsarLinkBase<dynamic>> _employeeModelGetLinks(EmployeeModel object) {
 }
 
 void _employeeModelAttach(
-    IsarCollection<dynamic> col, Id id, EmployeeModel object) {}
+  IsarCollection<dynamic> col,
+  Id id,
+  EmployeeModel object,
+) {}
 
 extension EmployeeModelQueryWhereSort
     on QueryBuilder<EmployeeModel, EmployeeModel, QWhere> {
@@ -158,17 +154,17 @@ extension EmployeeModelQueryWhereSort
 extension EmployeeModelQueryWhere
     on QueryBuilder<EmployeeModel, EmployeeModel, QWhereClause> {
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterWhereClause> isarIdEqualTo(
-      Id isarId) {
+    Id isarId,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: isarId,
-        upper: isarId,
-      ));
+      return query.addWhereClause(
+        IdWhereClause.between(lower: isarId, upper: isarId),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterWhereClause>
-      isarIdNotEqualTo(Id isarId) {
+  isarIdNotEqualTo(Id isarId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -191,7 +187,7 @@ extension EmployeeModelQueryWhere
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterWhereClause>
-      isarIdGreaterThan(Id isarId, {bool include = false}) {
+  isarIdGreaterThan(Id isarId, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: isarId, includeLower: include),
@@ -200,8 +196,9 @@ extension EmployeeModelQueryWhere
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterWhereClause> isarIdLessThan(
-      Id isarId,
-      {bool include = false}) {
+    Id isarId, {
+    bool include = false,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: isarId, includeUpper: include),
@@ -216,12 +213,14 @@ extension EmployeeModelQueryWhere
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerIsarId,
-        includeLower: includeLower,
-        upper: upperIsarId,
-        includeUpper: includeUpper,
-      ));
+      return query.addWhereClause(
+        IdWhereClause.between(
+          lower: lowerIsarId,
+          includeLower: includeLower,
+          upper: upperIsarId,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -229,76 +228,75 @@ extension EmployeeModelQueryWhere
 extension EmployeeModelQueryFilter
     on QueryBuilder<EmployeeModel, EmployeeModel, QFilterCondition> {
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      exitDateIsNull() {
+  exitDateIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'exitDate',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'exitDate'),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      exitDateIsNotNull() {
+  exitDateIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'exitDate',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'exitDate'),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      exitDateEqualTo(DateTime? value) {
+  exitDateEqualTo(DateTime? value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'exitDate',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'exitDate', value: value),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      exitDateGreaterThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
+  exitDateGreaterThan(DateTime? value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'exitDate',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'exitDate',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      exitDateLessThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
+  exitDateLessThan(DateTime? value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'exitDate',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'exitDate',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      exitDateBetween(
+  exitDateBetween(
     DateTime? lower,
     DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'exitDate',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'exitDate',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
@@ -307,27 +305,31 @@ extension EmployeeModelQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'id',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      idGreaterThan(
+  idGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'id',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -337,12 +339,14 @@ extension EmployeeModelQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'id',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -354,28 +358,29 @@ extension EmployeeModelQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'id',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      idStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  idStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'id',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -384,167 +389,171 @@ extension EmployeeModelQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'id',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition> idContains(
-      String value,
-      {bool caseSensitive = true}) {
+    String value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'id',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition> idMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'id',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      idIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      idIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'id',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      isarIdEqualTo(Id value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isarId',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      isarIdGreaterThan(
-    Id value, {
-    bool include = false,
+    String pattern, {
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'isarId',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'id',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      isarIdLessThan(
-    Id value, {
-    bool include = false,
-  }) {
+  idIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'isarId',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'id', value: ''),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      isarIdBetween(
+  idIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'id', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
+  isarIdEqualTo(Id value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'isarId', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
+  isarIdGreaterThan(Id value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'isarId',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
+  isarIdLessThan(Id value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'isarId',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
+  isarIdBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'isarId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'isarId',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      joinDateEqualTo(DateTime value) {
+  joinDateEqualTo(DateTime value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'joinDate',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'joinDate', value: value),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      joinDateGreaterThan(
-    DateTime value, {
-    bool include = false,
-  }) {
+  joinDateGreaterThan(DateTime value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'joinDate',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'joinDate',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      joinDateLessThan(
-    DateTime value, {
-    bool include = false,
-  }) {
+  joinDateLessThan(DateTime value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'joinDate',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'joinDate',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      joinDateBetween(
+  joinDateBetween(
     DateTime lower,
     DateTime upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'joinDate',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'joinDate',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
@@ -553,43 +562,49 @@ extension EmployeeModelQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'name',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      nameGreaterThan(
+  nameGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'name',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      nameLessThan(
+  nameLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'name',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -601,123 +616,124 @@ extension EmployeeModelQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'name',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'name',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      nameStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  nameStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'name',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      nameEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  nameEndsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'name',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      nameContains(String value, {bool caseSensitive = true}) {
+  nameContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'name',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'name',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition> nameMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+    String pattern, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'name',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'name',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      nameIsEmpty() {
+  nameIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'name',
-        value: '',
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'name', value: ''),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      nameIsNotEmpty() {
+  nameIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'name',
-        value: '',
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'name', value: ''),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition> roleEqualTo(
-      EmployeeRole value) {
+    EmployeeRole value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'role',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'role', value: value),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      roleGreaterThan(
-    EmployeeRole value, {
-    bool include = false,
-  }) {
+  roleGreaterThan(EmployeeRole value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'role',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'role',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterFilterCondition>
-      roleLessThan(
-    EmployeeRole value, {
-    bool include = false,
-  }) {
+  roleLessThan(EmployeeRole value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'role',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'role',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -728,13 +744,15 @@ extension EmployeeModelQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'role',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'role',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -754,7 +772,7 @@ extension EmployeeModelQuerySortBy
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterSortBy>
-      sortByExitDateDesc() {
+  sortByExitDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'exitDate', Sort.desc);
     });
@@ -779,7 +797,7 @@ extension EmployeeModelQuerySortBy
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterSortBy>
-      sortByJoinDateDesc() {
+  sortByJoinDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'joinDate', Sort.desc);
     });
@@ -819,7 +837,7 @@ extension EmployeeModelQuerySortThenBy
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterSortBy>
-      thenByExitDateDesc() {
+  thenByExitDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'exitDate', Sort.desc);
     });
@@ -856,7 +874,7 @@ extension EmployeeModelQuerySortThenBy
   }
 
   QueryBuilder<EmployeeModel, EmployeeModel, QAfterSortBy>
-      thenByJoinDateDesc() {
+  thenByJoinDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'joinDate', Sort.desc);
     });
@@ -895,8 +913,9 @@ extension EmployeeModelQueryWhereDistinct
     });
   }
 
-  QueryBuilder<EmployeeModel, EmployeeModel, QDistinct> distinctById(
-      {bool caseSensitive = true}) {
+  QueryBuilder<EmployeeModel, EmployeeModel, QDistinct> distinctById({
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'id', caseSensitive: caseSensitive);
     });
@@ -908,8 +927,9 @@ extension EmployeeModelQueryWhereDistinct
     });
   }
 
-  QueryBuilder<EmployeeModel, EmployeeModel, QDistinct> distinctByName(
-      {bool caseSensitive = true}) {
+  QueryBuilder<EmployeeModel, EmployeeModel, QDistinct> distinctByName({
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
     });

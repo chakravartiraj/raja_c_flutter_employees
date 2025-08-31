@@ -1,16 +1,52 @@
-# raja_c_flutter_employees
+# Raja C Flutter Employees
 
-A new Flutter project.
+A take home assignment to demonstrate employee management system built with Flutter 3.9, supporting Android & Web platforms.
+
+## Features
+- Employee CRUD (Create, Read, Update, Delete)
+- Custom form widgets with validation
+- Modern UI with Material 3 and theming
+- Date and role selectors
+- Sticky headers, swipe-to-delete, and more
+- Responsive design for web and mobile
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) (3.9 or later)
+- Dart 3.0 or later
 
-A few resources to get you started if this is your first Flutter project:
+### Run Locally
+```bash
+flutter pub get
+flutter run
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Run on Web
+```bash
+flutter run -d chrome
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Deploy to Netlify (Web)
+This project is ready for Netlify static hosting. The `netlify.toml` is preconfigured.
+
+### Steps:
+1. Push your code to GitHub: https://github.com/chakravartiraj/raja_c_flutter_employees
+2. Go to [Netlify](https://app.netlify.com/) and create a new site from GitHub
+3. Select your repo and use these settings:
+   - **Build command:** `flutter build web --release`
+   - **Publish directory:** `build/web`
+4. Netlify will auto-detect the `netlify.toml` and handle SPA routing
+
+## Project Structure
+- `lib/` - Main source code
+  - `features/employees/` - Employee domain, presentation, widgets
+  - `core/` - Utilities, theming, DI, etc.
+- `web/` - Web entrypoint (auto-generated)
+- `netlify.toml` - Netlify deployment config
+
+## Contributing
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+[MIT](LICENSE)
