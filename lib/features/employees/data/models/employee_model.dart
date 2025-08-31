@@ -9,6 +9,7 @@ class EmployeeModel {
 
   late String id;
   late String name;
+  @Enumerated(EnumType.name)
   late EmployeeRole role;
   late DateTime joinDate;
   DateTime? exitDate;
